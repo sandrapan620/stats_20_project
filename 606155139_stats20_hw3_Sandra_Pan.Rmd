@@ -171,7 +171,7 @@ length(min_coins) == length(cents)
 ```{r Question 4b}
 cents <- 1:99
 
-quarters <- cents %/% 25
+quarters <- cents %/% 20
 cents_now <- cents - quarters*25
 
 dimes <- cents_now %/% 10
