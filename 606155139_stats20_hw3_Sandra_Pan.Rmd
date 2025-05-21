@@ -19,8 +19,8 @@ output:
 ### (a)
 <!-- USE THE CODE CHUNK BELOW -->
 ```{r Question 1a}
-# Homework scores
-scores <- c(87, 94, 68, 73,
+# Homework scored;fhas;ghwotrosiahdf;kj;liasfoiawhe;liasdf;lkasdj
+scores <- c(87, 94, 68, 70,
 91, 55, 82, 77,
 90, 66)
 # Student names (same length as scores)
