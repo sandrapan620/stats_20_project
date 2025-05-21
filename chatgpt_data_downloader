@@ -1,0 +1,53 @@
+library(httr)
+library(jsonlite)
+library(dplyr)
+
+# Your TMDb API key
+api_key <- "8d9443eeb68c055d833b6b0ab517f645"
+
+# Helper to fetch a page of movies
+get_discover_page <- function(page_num) {
+  url <- paste0("https://api.themoviedb.org/3/discover/movie?api_key=", api_key,
+                "&sort_by=popularity.desc&page=", page_num)
+  response <- fromJSON(content(GET(url), "text", encoding = "UTF-8"))
+  return(response$results)
+}
+
+# Step 1: Get a pool of movie IDs from random pages
+set.seed(123)  # for reproducibility
+random_pages <- sample(1:100, 10)  # pull 10 pages of 20 movies = 200 candidates
+
+all_movies <- lapply(random_pages, get_discover_page)
+movie_pool <- bind_rows(all_movies)
+
+# Step 2: Randomly sample 50 movies from that pool
+sampled_movies <- movie_pool %>%
+  distinct(id, title) %>%
+  sample_n(50)
+
+# Step 3: Fetch detailed info for each movie
+get_movie_details <- function(movie_id) {
+  Sys.sleep(0.1)  # rate limiting
+  url <- paste0("https://api.themoviedb.org/3/movie/", movie_id, "?api_key=", api_key)
+  result <- fromJSON(content(GET(url), "text", encoding = "UTF-8"))
+  data.frame(
+    id = result$id,
+    title = result$title,
+    release_date = result$release_date,
+    budget = result$budget,
+    revenue = result$revenue,
+    runtime = result$runtime,
+    popularity = result$popularity,
+    vote_average = result$vote_average,
+    vote_count = result$vote_count,
+    stringsAsFactors = FALSE
+  )
+}
+
+movie_df <- bind_rows(lapply(sampled_movies$id, get_movie_details))
+
+# View the dataframe
+print(movie_df)
+
+# Optional: Save to CSV
+write.csv(movie_df, "random_50_movies.csv", row.names = FALSE)
