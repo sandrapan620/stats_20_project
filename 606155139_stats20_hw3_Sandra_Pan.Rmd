@@ -1,0 +1,255 @@
+---
+title: "Stats 20, W25 -- Homework 3"
+author: "Sandra Pan -- 606155139"
+date: "`r format(Sys.Date(), '%D')`"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: '4'
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    code_folding: show
+---
+
+
+## Question 1
+
+### (a)
+<!-- USE THE CODE CHUNK BELOW -->
+```{r Question 1a}
+# Homework scores
+scores <- c(87, 94, 68, 73,
+91, 55, 82, 77,
+90, 66)
+# Student names (same length as scores)
+students <- c("Alice", "Bob", "Charlie", "Diana",
+"Alice", "Bob", "Charlie", "Diana",
+"Alice", "Bob")
+# Homework assignments (same length as scores)
+assignments <- c("HW1", "HW1", "HW1", "HW1",
+"HW2", "HW2", "HW2", "HW2",
+"HW3", "HW3")
+
+# extract the numeric vector of positions (indices) which the logical values are TRUE
+bob_index <- which(students == "Bob")
+bob_scores <- scores[bob_index]
+bob_scores
+```
+
+### (b)
+<!-- USE THE CODE CHUNK BELOW -->
+```{r Question 1b}
+mean(bob_scores)
+```
+
+### (c)
+<!-- USE THE CODE CHUNKS BELOW -->
+```{r Question 1c first}
+hw2_index <- which(assignments == "HW2")
+hw2_scores <- scores[hw2_index]
+hw2_scores
+
+```
+
+```{r Question 1c second}
+hw2_students <- students[hw2_index]
+hw2_students
+```
+
+### (d)
+<!-- USE THE CODE CHUNK BELOW -->
+```{r Question 1d}
+low_scores_index <- which(scores < 70)
+low_scores_index
+unique(students[low_scores_index])
+```
+
+### (e)
+<!-- USE THE CODE CHUNK BELOW -->
+```{r Question 1e}
+scores[scores < 70] <- 0
+# rewrite bob_scores to include the 0
+bob_scores <- scores[bob_index]
+mean(bob_scores)
+```
+
+
+## Question 2
+
+### (a)
+<!-- USE THE CODE CHUNK BELOW -->
+```{r Question 2a}
+commute_times <- c(14, 12, 20, 19, 15, 20, 28, 20, 20, 18)
+# which days did andy have a commute time that was more than one sd away from the mean commute time?
+standard_dev <- sd(commute_times)
+mean_time <- mean(commute_times)
+times <- commute_times[commute_times < abs(mean_time - standard_dev)]
+times
+```
+<!-- ENTER YOUR EXPLANATION BELOW (USING INLINE R AS YOU WILL) -->
+I created a vector called commute_times. I then created objects that were the the standard deviation and mean of commute_times. Then, I created another object called times that computed whether the values in commute times were outside of one standard deviation of the mean.
+
+### (b)
+<!-- USE THE CODE CHUNK BELOW -->
+```{r Question 2b}
+within_times <- commute_times[commute_times > abs(mean_time - standard_dev)]
+within_times
+```
+<!-- ENTER YOUR EXPLANATION BELOW (USING INLINE R AS YOU WILL) -->
+I used the same code as part a, but I changed `commute_times[commute_times < abs(mean_time - standard_dev)]` to `commute_times[commute_times > abs(mean_time - standard_dev)]`. The changing of less than to greater than sign gave me the commute times that were within one SD of the mean. 
+
+### (c)
+<!-- USE THE CODE CHUNK BELOW -->
+```{r Question 2c}
+length(within_times) / length(commute_times)
+```
+<!-- ENTER YOUR EXPLANATION BELOW (USING INLINE R AS YOU WILL) -->
+To compute the proportion of days that Andy had a commute time that was within one sd of the mean commute time, I took my answer from part b that computed the times that were within one sd (also known as within_times). Then, I divided the `length(within_times) / length(commute_times)` to compute the proportion of times that were within one sd compared to the length of all the times.  
+
+## Question 3
+
+```{r Question 3}
+NA & TRUE
+NA & FALSE
+NA | TRUE
+NA | FALSE
+```
+<!-- ENTER YOUR EXPLANATION BELOW, FEEL FREE TO EDIT THE ABOVE CODE CHUNK -->
+In the first line, `NA & TRUE` will output `NA` because NA in a logical vector represents a missing logical value, so it could either be TRUE or FALSE. In the second line,`NA & FALSE`, it will return FALSE because if NA can be TRUE or FALSE, then the & operator will output FALSE because of the FALSE value. In the third line, `NA | TRUE`, the output will be TRUE because if it is or, NA could be true or false and the output would still be true regardless. In the final line. `NA | FALSE`, the output would be NA, because NA can be true or false, and it wouldn't directly output FALSE.
+
+## Question 4
+
+<!-- PUT YOUR CODE FROM HW 1 HERE -->
+The code I wrote for HW 1 is shown above, and it is vectorized because it goes through each element across the entire vector.
+
+```{r Question 4 background} 
+cents <- 47
+quarters <- cents %/% 25
+cents_now <- cents - quarters*25
+
+dimes <- cents_now %/% 10
+cents_now <- cents_now - dimes*10
+
+nickels <- cents_now %/% 5
+cents_now <- cents_now - nickels*5
+
+pennies <- cents_now %/% 1
+cents_now <- cents_now - pennies*1
+
+min_coins <- quarters + dimes + nickels + pennies
+min_coins
+```
+
+### (a)
+<!-- ENTER YOUR ANSWER BELOW -->
+<!-- USE THE CODE CHUNK BELOW IF YOU'D LIKE -->
+```{r Question 4a}
+cents <- 1:100 
+
+quarters <- cents %/% 25
+cents_now <- cents - quarters*25
+
+dimes <- cents_now %/% 10
+cents_now <- cents_now - dimes*10
+
+nickels <- cents_now %/% 5
+cents_now <- cents_now - nickels*5
+
+pennies <- cents_now %/% 1
+cents_now <- cents_now - pennies*1
+
+min_coins <- quarters + dimes + nickels + pennies
+min_coins
+# is it vectorized? check the length 
+length(min_coins) == length(cents)
+```
+
+### (b)
+<!-- ENTER YOUR ANSWER BELOW, IT CAN BE JUST COMMANDs; NO NEED TO STORE OBJECTs -->
+```{r Question 4b}
+cents <- 1:99
+
+quarters <- cents %/% 25
+cents_now <- cents - quarters*25
+
+dimes <- cents_now %/% 10
+cents_now <- cents_now - dimes*10
+
+nickels <- cents_now %/% 5
+cents_now <- cents_now - nickels*5
+
+pennies <- cents_now %/% 1
+cents_now <- cents_now - pennies*1
+
+min_coins <- quarters + dimes + nickels + pennies
+min_coins
+
+# find where the indices = max number of coins
+max(min_coins)
+# which coins does min_coins >= 9?
+which(min_coins >= 9)
+
+```
+
+
+## Question 5
+
+### (a)
+<!-- USE THE CODE CHUNK BELOW -->
+```{r Question 5a}
+x <- c(FALSE, FALSE, TRUE, TRUE, FALSE) #[1] FALSE
+my_table <- table(x) # gives the counts in the table
+# find the name where my_table is true 
+names(my_table[my_table == max(my_table)])
+
+x <- c(1, 2, 3, 1, 2) # [1] 1 2
+my_table <- table(x)
+names(my_table[my_table == max(my_table)])
+
+x <- c(3, 3, 2, 2, 1) # [1] 2 3 or [1] 3 2 is fine
+my_table <- table(x)
+names(my_table[my_table == max(my_table)])
+
+
+
+```
+
+### (b)
+<!-- USE THE CODE CHUNK BELOW -->
+```{r Question 5b}
+x <- c(FALSE, FALSE, TRUE, TRUE, FALSE) # [1] FALSE
+my_table <- unique(table(x))
+all_modes <- names(my_table[my_table == max(my_table)])
+unique(x)[unique(x) %in% all_modes][1]
+
+x <- c(1, 2, 3, 1, 2) # [1] 1
+my_table <- table(x)
+all_modes <- names(my_table[my_table == max(my_table)])
+unique(x)[unique(x) %in% all_modes][1]
+
+x <- c(3, 3, 2, 2, 1) # [1] 3
+my_table <- table(x)
+all_modes <- names(my_table[my_table == max(my_table)])
+unique(x)[unique(x) %in% all_modes][1]
+
+
+```
+
+
+
+## Question 6
+
+<!-- MODIFY THE CODE CHUNK BELOW -->
+```{r Question 6a}
+jerry <- (2:8 * (5 %% 3^(-2:7))) > 2
+jerry
+
+```
+
+
+
+
+
+
